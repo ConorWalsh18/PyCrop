@@ -22,13 +22,13 @@ def Crop():
 
 def CropQuestions():        
     croppedImagesPath = originalImagesPath + "\\Cropped_Questions\\"
-    originalImages = os.listdir(originalImagesPath)
+    originalImages = os.listdir(originalImagesPath)      
 
     if not os.path.exists(croppedImagesPath):
         os.makedirs(croppedImagesPath)
 
     for item in originalImages:
-        imagePath = os.path.join(originalImagesPath, item)
+        imagePath = os.path.join(originalImagesPath, item)        
         if os.path.isfile(imagePath):
             originalFile = os.path.basename(imagePath)
             originalFileName, originalFileExtension = os.path.splitext(originalFile)
@@ -37,13 +37,13 @@ def CropQuestions():
 
             # Crops the image with the pixel coordinates defined as (left, upper, right, lower). Keep the 
             # left and upper coords to "0, 0" so that it crops the image from the upper left most corner.
-            croppedImage = originalImage.crop((165, 0, 1500, 1015))
+            croppedImage = originalImage.crop((165, 0, 1500, 1015))            
 
             croppedImage.filter(ImageFilter.MedianFilter(3))
             colorArray = numpy.array(croppedImage.convert('RGB'))                        
             firstLetterY, firstLetterX = numpy.where(numpy.all(colorArray==[229,230,231], axis=2))  #Finds the coords for the first black pixel (should be the top of the first letter)
             answerBoxBorderY, answerBoxBorderX = numpy.where(numpy.all(colorArray==[85,144,204], axis=2)) #Finds the coords for the last teal pixel (should be the bottom of the answer box)
-            headerY, headerX = numpy.where(numpy.all(colorArray==[56, 82, 164], axis=2))  #Blue header/footer                     
+            headerY, headerX = numpy.where(numpy.all(colorArray==[56, 82, 164], axis=2))  #Blue header/footer                            
 
             #If the answerBoxBorderY length is less than 2000 then we know that the answer box is cut off or is not in the picture
             #at all. Therefore, we want the top and bottom coords to be different to fit everything in the cropped image.
@@ -55,8 +55,8 @@ def CropQuestions():
                 bottom = height
 
             right = 1250         
-            left = 0   
-            
+            left = 0
+
             finishedImage = colorArray[top:bottom, left:right]
             finishedImageName = croppedImagesPath + originalFileName + "_Question_Cropped.png"
             Image.fromarray(finishedImage).save(finishedImageName)
@@ -123,9 +123,9 @@ def RadioButtonSelected():
     statusLabel.pack_forget()
 
     if i.get() == 1:
-    	uncroppedHeader.config(text = "Choose the Folder With the Mo Fuckin' Uncropped Questions")		
+    	uncroppedHeader.config(text = "Choose the Folder With the Uncropped Questions")		
     else:
-    	uncroppedHeader.config(text = "Choose the Folder With the Mo Fuckin' Uncropped Answers")
+    	uncroppedHeader.config(text = "Choose the Folder With the Uncropped Answers")
 
     textBox.pack(side=LEFT, ipady = 6)
     browseButton.pack(side=LEFT, padx = 10)    
@@ -140,7 +140,7 @@ def FolderPathSelected():
 
 root = Tk()
 
-header = Label(master=root, text = "What You Croppin' Bih?")
+header = Label(master=root, text = "What You Croppin'?")
 header.pack(anchor=N, pady = 5)
 header.config(font=("bold", 20))
 
@@ -162,7 +162,7 @@ browseFrame.pack(anchor=N)
 textBox = Entry(browseFrame, width = 72, textvariable = folderPath, state = "disabled")
 browseButton = Button(browseFrame, text = "Browse", command = FolderPathSelected, font=("bold", 12))
 
-cropButton = Button(root, text = "Friggen Crop It up Bitch!", command=Crop, font=("bold", 15))
+cropButton = Button(root, text = "Crop It Up!", command=Crop, font=("bold", 15))
 statusLabel = Label(master=root)
 statusLabel.config(font=("bold", 15))
 
